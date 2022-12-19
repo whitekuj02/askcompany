@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+
 from .models import port
 # Register your models here.
 
@@ -6,11 +8,15 @@ from .models import port
 
 @admin.register(port)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['id', 'is_public', 'message', 'message_length', 'created_at', 'updated_at']
+    list_display = ['id', 'photo_tag', 'is_public', 'message', 'message_length', 'created_at', 'updated_at']
     list_display_links = ['message']
     list_filter = ['created_at' , 'is_public']
     search_fields = ['message']
 
+    def photo_tag(self, port):
+        if port.photo:
+            return mark_safe(f'<img src="{port.photo.url}" style="width: 72px" />')
+        return None
     def message_length(self, port):
         return f"{len(port.message)} 글자"
     message_length.short_description = "메세지 글자 수"
