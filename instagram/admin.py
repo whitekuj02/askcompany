@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import port
+from .models import port, Comment
 # Register your models here.
 
 # admin.site.register(port);
@@ -10,7 +10,7 @@ from .models import port
 class PostAdmin(admin.ModelAdmin):
     list_display = ['id', 'photo_tag', 'is_public', 'message', 'message_length', 'created_at', 'updated_at']
     list_display_links = ['message']
-    list_filter = ['created_at' , 'is_public']
+    list_filter = ['created_at', 'is_public']
     search_fields = ['message']
 
     def photo_tag(self, port):
@@ -20,3 +20,9 @@ class PostAdmin(admin.ModelAdmin):
     def message_length(self, port):
         return f"{len(port.message)} 글자"
     message_length.short_description = "메세지 글자 수"
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['message', 'port_key']
+    list_display_links = ['message']
